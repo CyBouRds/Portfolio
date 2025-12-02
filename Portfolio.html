@@ -205,12 +205,12 @@
 
       <div class="card" style="padding:18px">
         <div class="project-item">
-          <img class="project-thumb" src="https://via.placeholder.com/400x240?text=3D+Logo+Animation" alt="logo">
+          <img class="project-thumb" src="https://via.placeholder.com/400x240?text=3D+Logo+Animation" alt="logo" style="cursor:pointer" onclick="playVideo('3d-logo-animation.mp4')">
           <div>
             <div class="case-badge">Studio</div>
             <h3>3D Spinning Logo + Video Intro</h3>
             <p class="muted">End-to-end production: logo cleanup, 3D modeling, animation, rendering, and audio mixing — delivered in MP4 and WebM with transparent options.</p>
-            <a class="btn" href="#" style="margin-top:12px" onclick="openCase('animation')">Watch breakdown</a>
+            <a class="btn" href="#" style="margin-top:12px" onclick="playVideo('3d-logo-animation.mp4')">Watch breakdown</a>
           </div>
         </div>
       </div>
@@ -387,6 +387,13 @@
       const url = URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=`${id}-guide.txt`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
     }
     window.downloadGuide = downloadGuide;
+
+    // Video player function
+    function playVideo(videoSrc){
+      modalContent.innerHTML = `<div style="text-align:center"><video width="100%" height="auto" controls style="border-radius:10px;max-height:80vh"><source src="${videoSrc}" type="video/mp4">Your browser does not support the video tag.</video></div>`;
+      modal.classList.add('open'); document.body.style.overflow='hidden';
+    }
+    window.playVideo = playVideo;
 
     // CONTACT via EmailJS (client-side)
     // IMPORTANT: Replace 'YOUR_USER_ID', 'YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID' with your EmailJS values.
