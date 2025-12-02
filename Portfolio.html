@@ -1,168 +1,418 @@
 <!DOCTYPE html>
-git <html lang="en">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Ghait Satardekar — Portfolio 2025</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-  <!-- AOS ANIMATION LIBRARY -->
+  <!-- AOS -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <!-- tsParticles -->
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles-engine@3/tsparticles.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles@3/tsparticles.bundle.min.js" defer></script>
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js" defer></script>
 
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Poppins', sans-serif; background: #0d0f17; color: #ffffff; scroll-behavior: smooth; }
-    header { padding: 40px 10%; position: fixed; width: 100%; top:0; left:0; background: rgba(0,0,0,0.4); backdrop-filter: blur(10px); z-index: 10; }
+    :root{
+      --bg:#0d0f17; --card:#161923; --muted:#c7c7c7; --accent:#4f7cff; --neon: #7afcff;
+      --glass: rgba(255,255,255,0.04);
+    }
+    [data-theme="light"]{ --bg:#f7f9fc; --card:#ffffff; --muted:#4b5563; --accent:#2b6ef6; --neon:#1dd3ff; --glass: rgba(0,0,0,0.04); color:#071022 }
 
-    nav { display: flex; justify-content: space-between; align-items: center; }
-    nav a { color: #fff; margin-left: 25px; text-decoration: none; font-weight: 500; transition: 0.3s; }
-    nav a:hover { color: #4f7cff; }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Poppins,system-ui,Arial; background:var(--bg); color:var(--text,#fff); -webkit-font-smoothing:antialiased;
+    }
 
-    /* HERO */
-    .hero { height: 100vh; padding: 0 10%; display: flex; align-items: center; justify-content: space-between; }
-    .hero-text { max-width: 600px; }
-    .hero h1 { font-size: 4rem; line-height: 1.2; font-weight: 700; }
-    .hero p { font-size: 1.2rem; margin-top: 20px; color: #c7c7c7; }
-    .btn { margin-top: 30px; display: inline-block; padding: 14px 32px; background: #4f7cff; color: white; border-radius: 10px; text-decoration: none; font-weight: 600; transition: 0.3s; }
-    .btn:hover { background: #345fe0; }
+    /* Header */
+    header{position:fixed;top:0;left:0;right:0;z-index:60;padding:16px 6%;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(8px)}
+    .logo{font-weight:800;letter-spacing:1px;color:var(--accent)}
+    nav a{color:var(--muted);margin-left:18px;text-decoration:none;font-weight:600}
 
-    .hero-img img { width: 350px; border-radius: 20px; border:3px solid #4f7cff; box-shadow:0 0 25px #4f7cff; }
+    /* Hero */
+    .hero{min-height:100vh;display:flex;align-items:center;gap:40px;padding:120px 6% 80px;position:relative;overflow:hidden}
+    #tsparticles{position:absolute;inset:0;z-index:0}
+    .hero-inner{position:relative;z-index:5;display:flex;flex-wrap:wrap;gap:30px;align-items:center;width:100%}
+    .hero-left{flex:1;min-width:280px}
+    .hero-right{width:360px;display:flex;justify-content:center}
 
-    /* SECTIONS */
-    section { padding: 120px 10%; }
-    h2 { font-size: 2.8rem; margin-bottom: 25px; }
+    h1{font-size:clamp(28px,5vw,56px);line-height:1.02;margin:0}
+    p.lead{color:var(--muted);max-width:660px}
 
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 30px; }
-    .card { background: #161923; padding: 25px; border-radius: 12px; border: 1px solid #222; transition: 0.3s; }
-    .card:hover { transform: translateY(-6px); border-color:#4f7cff; }
+    .cta{margin-top:18px}
+    .btn{background:linear-gradient(90deg,var(--accent),#2e3ff4);color:#fff;padding:12px 20px;border-radius:12px;text-decoration:none;font-weight:700;display:inline-block}
+    .ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:10px 14px;border-radius:10px;color:var(--muted);margin-left:12px}
 
-    /* PROJECTS */
-    .project-card { background:#161923; padding:20px; border-radius:12px; border:1px solid #222; transition:0.3s; }
-    .project-card:hover { transform:translateY(-6px); border-color:#4f7cff; }
-    .project-card img { width:100%; border-radius:10px; margin-bottom:15px; }
+    /* Card grid */
+    section{padding:80px 6%}
+    h2{font-size:28px;margin-bottom:16px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+    .card{background:var(--card);padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);position:relative;overflow:visible}
+    .card:hover{box-shadow:0 10px 30px rgba(79,124,255,0.08);transform:translateY(-6px)}
 
-    /* CONTACT */
-    .contact-box { max-width: 450px; background:#161923; padding:30px; border-radius:12px; border:1px solid #222; }
+    /* Skill tooltip + modal */
+    .skill-title{font-weight:700;margin-bottom:8px}
+    .tooltip{position:absolute;top:14px;right:14px;background:linear-gradient(90deg, rgba(79,124,255,0.12), rgba(122,252,255,0.06));padding:10px;border-radius:10px;border:1px solid rgba(79,124,255,0.18);font-size:13px;color:var(--muted);display:none}
+    .card:hover .tooltip{display:block}
 
-    footer { margin-top: 80px; padding: 40px 10%; background: #0b0c12; text-align: center; color: #aaa; }
+    /* Modal */
+    .modal{position:fixed;inset:0;background:rgba(2,6,23,0.6);display:none;align-items:center;justify-content:center;z-index:80}
+    .modal.open{display:flex}
+    .modal-panel{width:min(900px,96%);background:var(--card);padding:22px;border-radius:12px;border:1px solid rgba(255,255,255,0.04);max-height:86vh;overflow:auto}
+    .modal-grid{display:grid;grid-template-columns:1fr 320px;gap:18px}
+    .modal-aside{background:linear-gradient(180deg,rgba(79,124,255,0.06),transparent);padding:16px;border-radius:10px}
+
+    /* Projects */
+    .project-item{display:flex;gap:16px;align-items:flex-start}
+    .project-thumb{width:200px;height:120px;border-radius:10px;object-fit:cover;border:1px solid rgba(255,255,255,0.04)}
+    .case-badge{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(79,124,255,0.12);color:var(--accent);font-weight:700;margin-bottom:8px}
+
+    /* Contact */
+    .contact-grid{display:grid;grid-template-columns:1fr 360px;gap:22px}
+    form input, form textarea{width:100%;padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:var(--text,#fff);margin-bottom:10px}
+    form button{padding:12px 16px;border-radius:10px;border:none;background:var(--accent);color:#fff;font-weight:700}
+
+    /* Toggle */
+    .switch{display:inline-flex;align-items:center;gap:8px}
+    .toggle{width:48px;height:28px;border-radius:99px;background:rgba(255,255,255,0.08);position:relative;padding:4px;display:inline-block}
+    .toggle-ball{width:20px;height:20px;border-radius:50%;background:#fff;position:absolute;left:4px;top:4px;transition:0.25s}
+    .toggle.on{background:linear-gradient(90deg,var(--accent),#2e3ff4)}
+    .toggle.on .toggle-ball{left:24px}
+
+    /* Neon heading */
+    .neon{color:var(--neon);text-shadow:0 0 6px rgba(122,252,255,0.3),0 0 16px rgba(79,124,255,0.12)}
+
+    /* Responsive */
+    @media (max-width:900px){.modal-grid{grid-template-columns:1fr}
+      .contact-grid{grid-template-columns:1fr}
+      .hero-right{display:none}
+    }
+
+    /* Small flourishes */
+    .muted{color:var(--muted)}
+    footer{padding:24px 6%;text-align:center;color:var(--muted);border-top:1px solid rgba(255,255,255,0.02)}
   </style>
 </head>
 <body>
+
   <header>
-    <nav>
-      <h3 style="font-weight:700; font-size:1.6rem;">GHAIT</h3>
-      <div>
+    <div class="logo neon">GHAIT</div>
+    <div style="display:flex;align-items:center;gap:18px">
+      <nav>
         <a href="#about">About</a>
         <a href="#skills">Skills</a>
         <a href="#projects">Projects</a>
-        <a href="#experience">Experience</a>
         <a href="#contact">Contact</a>
+      </nav>
+
+      <div class="switch" title="Toggle theme">
+        <div id="themeToggle" class="toggle" role="button" aria-pressed="false">
+          <div class="toggle-ball"></div>
+        </div>
       </div>
-    </nav>
+    </div>
   </header>
 
-  <section class="hero" id="home">
-    <div class="hero-text" data-aos="fade-up">
-      <h1>Cybersecurity & OSINT Expert<br>Digital Forensics | Creator | CEO</h1>
-      <p>
-        Specialist in digital forensics, malware analysis, VPN setup, OSINT investigations, and high-end design
-        including 3D logos, animations, and video editing.
-      </p>
-      <a href="Ghait-Satardekar-CV.pdf" download class="btn">Download CV</a>
-    </div>
+  <!-- Particle background -->
+  <div id="tsparticles"></div>
 
-    <div class="hero-img" data-aos="fade-left">
-      <img src="https://via.placeholder.com/350x400.png?text=Your+Photo+Here" alt="Ghait Photo" />
-    </div>
-  </section>
+  <main>
+    <section class="hero" id="home">
+      <div class="hero-inner">
+        <div class="hero-left" data-aos="fade-up">
+          <h1 class="neon">Ghait Satardekar</h1>
+          <h2 style="margin-top:6px">Cybersecurity & OSINT Expert — Digital Forensics | Creator | CEO</h2>
+          <p class="lead">I'm a Moroccan cyber investigator and creative studio owner. I design forensic workflows, run incident response, build VPN labs, and deliver high-end 3D logo animations and video content for brands.</p>
 
-  <section id="about" data-aos="fade-up">
-    <h2>About Me</h2>
-    <p style="max-width: 700px; color:#c7c7c7; line-height:1.7;">
-      I am a cybersecurity specialist studying at ISTA NTIC Hay Riad (2023–2025) with multiple CISCO certifications
-      and growing expertise in OSINT, digital forensics, network security, and cyber investigations. I also create
-      professional visual graphics, animated intros, and premium logos.
-    </p>
-  </section>
+          <div class="cta">
+            <a class="btn" href="#contact">Hire Me</a>
+            <a class="ghost" href="Ghait-Satardekar-CV.pdf" download>Download CV</a>
+          </div>
 
-  <section id="skills" data-aos="fade-up">
-    <h2>Skills</h2>
-    <div class="grid">
-      <div class="card">Digital Forensics</div>
-      <div class="card">Incident Response & Malware Analysis</div>
-      <div class="card">OSINT Intelligence Gathering</div>
-      <div class="card">CCNA Networking</div>
-      <div class="card">OpenVPN & Secure Architecture</div>
-      <div class="card">System Monitoring & UEBA</div>
-      <div class="card">3D Logo Animation</div>
-      <div class="card">Video Editing</div>
-      <div class="card">T-Shirt Design</div>
-    </div>
-  </section>
+          <div style="margin-top:22px;color:var(--muted)">
+            <strong>Quick stats:</strong> CEO @ MCTUS • CCNAv7 • ISTA NTIC 2023–2025 • Fluent: AR/FR/EN
+          </div>
+        </div>
 
-  <section id="projects" data-aos="fade-up">
-    <h2>Projects</h2>
-    <div class="grid">
-      <div class="project-card">
-        <img src="https://via.placeholder.com/500x300?text=Cyber+Investigation" />
-        <h3>Digital Forensics Case Study</h3>
-        <p>Analyzed a compromised system, identified malicious insider activity, and documented evidence for reporting.</p>
+        <div class="hero-right" data-aos="fade-left">
+          <img src="./profile-photo.png" alt="Ghait Satardekar" style="border-radius:14px;border:4px solid var(--accent);box-shadow:0 20px 50px rgba(79,124,255,0.08)"/>
+        </div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" data-aos="fade-up">
+      <h2>About Me</h2>
+      <p class="muted">I combine technical cyber investigation skills with a creative studio practice. I mentor junior investigators, run case simulations, and consult for small businesses on secure infrastructure.</p>
+
+      <div style="margin-top:18px;display:flex;gap:16px;flex-wrap:wrap">
+        <div class="card" style="min-width:220px">
+          <div style="font-weight:800">Location</div>
+          <div class="muted">Temara, Morocco</div>
+        </div>
+        <div class="card" style="min-width:220px">
+          <div style="font-weight:800">Contact</div>
+          <div class="muted">ghaitsatar@gmail.com<br>+212 702 773 357</div>
+        </div>
+        <div class="card" style="min-width:220px">
+          <div style="font-weight:800">Studio</div>
+          <div class="muted">Professional studio for animation & post-production</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills with modals -->
+    <section id="skills" data-aos="fade-up">
+      <h2>Skills</h2>
+      <div class="grid" id="skillsGrid">
+        <!-- skill cards injected by JS for maintainability -->
+      </div>
+    </section>
+
+    <!-- Projects -->
+    <section id="projects" data-aos="fade-up">
+      <h2>Featured Projects & Case Studies</h2>
+
+      <div class="card" style="margin-bottom:16px;padding:18px">
+        <div class="project-item">
+          <img class="project-thumb" src="./case-study-forensics.jpg" alt="case">
+          <div>
+            <div class="case-badge">Case Study</div>
+            <h3>Insider Data Theft — Full Investigation</h3>
+            <p class="muted">A full incident response + digital forensics case where I identified a disgruntled employee exfiltrating customer data. Outcomes: evidence packet, mitigation checklist, and hardening roadmap.</p>
+            <a class="btn" href="#" style="margin-top:12px" onclick="openCase('insider')">Read full case</a>
+          </div>
+        </div>
       </div>
 
-      <div class="project-card">
-        <img src="https://via.placeholder.com/500x300?text=OSINT" />
-        <h3>OSINT Profiling Framework</h3>
-        <p>Developed an intelligence-gathering methodology used in cybersecurity investigations and risk assessments.</p>
+      <div class="card" style="margin-bottom:16px;padding:18px">
+        <div class="project-item">
+          <img class="project-thumb" src="https://via.placeholder.com/400x240?text=OSINT+Framework" alt="osint">
+          <div>
+            <div class="case-badge">Tooling</div>
+            <h3>OSINT Profiling Framework</h3>
+            <p class="muted">Built a repeatable OSINT methodology used for profiling high-value targets while preserving privacy and ethics. Includes data validation and chain-of-evidence templates.</p>
+            <a class="btn" href="#" style="margin-top:12px" onclick="openCase('osint')">See details</a>
+          </div>
+        </div>
       </div>
 
-      <div class="project-card">
-        <img src="https://via.placeholder.com/500x300?text=3D+Logo" />
-        <h3>3D Spinning Logo Animation</h3>
-        <p>Created high-quality 3D logo animations for professional intros and brand content.</p>
+      <div class="card" style="padding:18px">
+        <div class="project-item">
+          <img class="project-thumb" src="https://via.placeholder.com/400x240?text=3D+Logo+Animation" alt="logo">
+          <div>
+            <div class="case-badge">Studio</div>
+            <h3>3D Spinning Logo + Video Intro</h3>
+            <p class="muted">End-to-end production: logo cleanup, 3D modeling, animation, rendering, and audio mixing — delivered in MP4 and WebM with transparent options.</p>
+            <a class="btn" href="#" style="margin-top:12px" onclick="openCase('animation')">Watch breakdown</a>
+          </div>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section id="experience" data-aos="fade-up">
-    <h2>Education & Experience</h2>
-    <div class="grid">
-      <div class="card">
-        <h3>ISTA NTIC Hay Riad (2023–2025)</h3>
-        <p>Technicien spécialisé en cybersécurité</p>
-      </div>
-      <div class="card">
-        <h3>CISCO Certifications</h3>
-        <p>CCNAv7, Cybersecurity Generalist (2024)</p>
-      </div>
-      <div class="card">
-        <h3>Internship — MTDS</h3>
-        <p>Hands-on networking, digital systems, and real-world security exposure.</p>
-      </div>
-      <div class="card">
-        <h3>CEO — MCTUS</h3>
-        <p>Medical Computing Technology & Ultrasound Society</p>
-      </div>
-    </div>
-  </section>
+    <!-- Contact -->
+    <section id="contact" data-aos="fade-up">
+      <h2>Contact</h2>
+      <div class="contact-grid">
+        <div>
+          <p class="muted">Want to work together? Fill the form below — it will be sent to my inbox using EmailJS (client-side). You will need to replace the EmailJS user ID, service ID, and template ID in the script at the bottom with your own values.</p>
 
-  <section id="contact" data-aos="fade-up">
-    <h2>Contact</h2>
-    <div class="contact-box">
-      <p>Email: <strong>ghaitsatar@gmail.com</strong></p>
-      <p>Phone: <strong>+212 702 773 357</strong></p>
-      <p>Location: Temara, Morocco</p>
-    </div>
-  </section>
+          <form id="contactForm">
+            <input type="text" name="from_name" placeholder="Your name" required>
+            <input type="email" name="from_email" placeholder="Your email" required>
+            <input type="text" name="subject" placeholder="Subject" required>
+            <textarea name="message" rows="6" placeholder="Message" required></textarea>
+            <button type="submit">Send message</button>
+            <div id="formStatus" style="margin-top:10px;color:var(--muted)"></div>
+          </form>
+        </div>
+
+        <div>
+          <div class="card" style="padding:16px">
+            <h3>Studio & Services</h3>
+            <ul class="muted">
+              <li>Digital forensics & incident response</li>
+              <li>OSINT investigations & profiles</li>
+              <li>OpenVPN & secure network design</li>
+              <li>3D logos, intros, motion design</li>
+              <li>Video editing & post production</li>
+            </ul>
+            <div style="margin-top:12px">Email: <strong>ghaitsatar@gmail.com</strong></div>
+            <div>Phone: <strong>+212 702 773 357</strong></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
 
   <footer>
-    © 2025 Ghait Satardekar — All Rights Reserved
-  </footer>
+    © 2025 Ghait Satardekar — Built with ❤️ • <span class="muted">Dark/Light mode, particles, modals, EmailJS contact</span>
+    <div id="visitor-widget" style="position:fixed; bottom:20px; right:20px; background:#0d0f17dd; padding:15px 22px; border-radius:12px; border:1px solid #4f7cff; box-shadow:0 0 20px #4f7cff88; z-index:9999; backdrop-filter:blur(8px);">
+  <div style="font-size:0.9rem; color:#4f7cff; font-weight:600; margin-bottom:5px;">📊 Live Stats</div>
+  <div style="font-size:1.1rem; color:#0ff; text-shadow:0 0 10px #0ff;">Total Visitors: <span id="total-visits">0</span></div>
+  <div style="font-size:1rem; color:#aaf;">Daily Visitors: <span id="daily-visits">0</span></div>
+  <div style="font-size:1rem; color:#aaf;">Unique Visitors: <span id="unique-visits">0</span></div>
+</div>
+
+<script>
+  function animateCounter(id, endValue, duration = 1200){
+    let start = 0;
+    const increment = endValue / (duration / 16);
+    const el = document.getElementById(id);
+
+    function update(){
+      start += increment;
+      if(start >= endValue){ start = endValue; }
+      el.textContent = Math.floor(start);
+      if(start < endValue){ requestAnimationFrame(update); }
+    }
+    update();
+  }
+
+  Promise.all([
+    fetch('https://api.countapi.xyz/hit/ghait-portfolio-2025/total').then(r => r.json()),
+    fetch('https://api.countapi.xyz/hit/ghait-portfolio-2025/daily').then(r => r.json()),
+    fetch('https://api.countapi.xyz/hit/ghait-portfolio-2025/unique').then(r => r.json())
+  ])
+  .then(([total, daily, unique]) => {
+    animateCounter('total-visits', total.value);
+    animateCounter('daily-visits', daily.value);
+    animateCounter('unique-visits', unique.value);
+  })
+  .catch(() => {
+    document.getElementById('total-visits').textContent = '—';
+  });
+</script>
+
+  <!-- Modal container for skill details & case studies -->
+  <div id="modal" class="modal" aria-hidden="true">
+    <div class="modal-panel" role="dialog" aria-modal="true">
+      <button onclick="closeModal()" style="float:right;background:transparent;border:none;color:var(--muted);font-weight:800">✕</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
 
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
-    AOS.init();
+    // initialize AOS
+    AOS.init({duration:700,once:true,offset:60});
+
+    // tsParticles configuration
+    window.addEventListener('load', async () => {
+      if (window.tsParticles) {
+        tsParticles.load('tsparticles', {
+          fpsLimit: 60,
+          background: {color: {value: 'transparent'}},
+          particles: {
+            number: {value: 50, density: {enable: true, area: 800}},
+            color: {value: ['#4f7cff', '#7afcff', '#9b8bff']},
+            shape: {type:'circle'},
+            opacity: {value:0.7,random:{enable:true,minimum:0.3}},
+            size: {value:{min:2,max:6}},
+            move: {enable:true,speed:1.8,direction:'none',outModes:{default:'out'}}
+          },
+          interactivity: {events:{onHover:{enable:true,mode:'repulse'},onClick:{enable:true,mode:'push'}},modes:{repulse:{distance:100},push:{quantity:3}}}
+        });
+      }
+    });
+
+    // Theme toggle
+    const themeToggle = document.getElementById('themeToggle');
+    const setTheme = (t) => { document.documentElement.setAttribute('data-theme', t); localStorage.setItem('theme', t); themeToggle.classList.toggle('on', t==='light'); themeToggle.setAttribute('aria-pressed', t==='light') }
+    const saved = localStorage.getItem('theme') || 'dark'; setTheme(saved);
+    themeToggle.addEventListener('click', () => setTheme(document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light'));
+
+    // Skills data (used to generate cards and detail pages inside modal)
+    const skills = [
+      {id:'digital-forensics',title:'Digital Forensics',summary:'Full forensic workflow: disk & memory imaging, hash validation, timeline analysis, log correlation, and evidence packaging.',content:`<h2>Digital Forensics</h2><p class=\"muted\">I perform full forensic acquisitions (FTK, Autopsy, EnCase style workflows) including volatile memory analysis, timeline reconstruction, artifact extraction (browsers, system events), and deliver court-ready evidence reports with hash chains and reproducible scripts.</p><h3>Tools & Techniques</h3><ul class=\"muted\"><li>Autopsy, Sleuth Kit, FTK, Rekall</li><li>Volatility for memory forensics</li><li>Logs correlation & SIEM artifact parsing</li><li>Evidence packaging + hash chain checks</li></ul>`},
+
+      {id:'incident-response',title:'Incident Response',summary:'Triage, containment, eradication, recovery, and post-incident reports; playbook-driven.',content:`<h2>Incident Response</h2><p class=\"muted\">I follow structured playbooks: initial triage, containment (network isolation, credential reset), eradication (malware removal), recovery (system rebuilds), and post-incident analysis with indicators and mitigation steps.</p><h3>Example Tasks</h3><ul class=\"muted\"><li>Memory & disk analysis</li><li>IOC extraction & blocking</li><li>Compromise assessment & root cause</li></ul>`},
+
+      {id:'osint',title:'OSINT Intelligence',summary:'Target profiling, footprinting, metadata extraction, and ethical data handling.',content:`<h2>OSINT</h2><p class=\"muted\">Repeatable OSINT procedures focused on verification, layering sources, and preserving privacy. I integrate automated tooling with manual validation for high-confidence profiles and timeline mapping.</p><h3>Highlights</h3><ul class=\"muted\"><li>Social network analysis & graphing</li><li>Metadata extraction & image verification</li><li>Dark web searches & leak hunting</li></ul>`},
+
+      {id:'networking',title:'CCNA Networking',summary:'Routing, switching, subnetting, VLANs, and Cisco best practices.',content:`<h2>Networking & CCNA</h2><p class=\"muted\">Strong foundation in routing & switching, VLANs, ACLs, and secure network design. I build labs with Packet Tracer and deploy small-to-medium enterprise network topologies.</p>`},
+
+      {id:'openvpn',title:'OpenVPN & Architecture',summary:'Secure VPN deployment, PKI certificates, and lab architecture.',content:`<h2>OpenVPN & Secure Architecture</h2><p class=\"muted\">Certificate-based VPNs, site-to-site tunnels, segmentation, and secure remote access. I deploy test labs and production-ready configs with monitoring and failover.</p>`},
+
+      {id:'ueba',title:'UEBA & Monitoring',summary:'User behavior analytics, detection rules, and SIEM correlation.',content:`<h2>UEBA & Monitoring</h2><p class=\"muted\">I craft UEBA rules to surface anomalous activities and integrate them into SIEM alerts and response workflows. Focus on insider threat detection and contextual risk scoring.</p>`},
+
+      {id:'3d-animation',title:'3D Logo Animation',summary:'Blender-based workflows, lighting, camera, and render pipelines.',content:`<h2>3D Logo Animation</h2><p class=\"muted\">End-to-end 3D logo pipeline: model cleanup, texture & lighting, camera animation, and post render compositing. Deliverables: MP4, WebM, GIF with transparent options.</p>`},
+
+      {id:'video-editing',title:'Video Editing',summary:'Premiere & After Effects, color grading, and audio design.',content:`<h2>Video Editing</h2><p class=\"muted\">From rough cut to color-graded final: editing, motion graphics, transitions, and audio mastering for polished promos or ads.</p>`},
+
+      {id:'tshirt-design',title:'T-Shirt Design',summary:'Vector design, typography, and print-ready assets.',content:`<h2>T-Shirt Design</h2><p class=\"muted\">Vector-first designs, print-safe color separations, EPS/SVG exports, and marketplace-ready mockups for Redbubble & print-on-demand.</p>`}
+    ];
+
+    // Render skill cards
+    const grid = document.getElementById('skillsGrid');
+    skills.forEach(s => {
+      const div = document.createElement('div'); div.className='card'; div.tabIndex=0;
+      div.innerHTML = `<div class=\"skill-title\">${s.title}</div><div class=\"muted\">${s.summary}</div><div class=\"tooltip\">Click to open detailed page</div>`;
+      div.addEventListener('click', ()=> openSkill(s.id));
+      div.addEventListener('keypress', (e)=>{ if(e.key==='Enter') openSkill(s.id) });
+      grid.appendChild(div);
+    });
+
+    // Modal handling
+    const modal = document.getElementById('modal'); const modalContent = document.getElementById('modalContent');
+    function openSkill(id){
+      const s = skills.find(x=>x.id===id);
+      modalContent.innerHTML = `<div class=\"modal-grid\"><div>${s.content}</div><div class=\"modal-aside\"><h3>Quick Links</h3><p class=\"muted\">Downloads, configurations, and mini-guides related to ${s.title}.</p><a class=\"btn\" href=\"#\" onclick=\"downloadGuide(\'${s.id}\')\">Download guide</a></div></div>`;
+      modal.classList.add('open'); modal.setAttribute('aria-hidden','false');
+      document.body.style.overflow='hidden';
+    }
+    function closeModal(){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+    window.closeModal = closeModal;
+
+    // Case study modal open
+    function openCase(key){
+      let html='';
+      if(key==='insider'){ html=`<h2>Insider Data Theft — Case Study</h2><p class=\"muted\">Full timeline from detection to containment. Analysis included EDR alerts, file hash chain, exfiltration channel identification, and user behavior anomaly mapping. Delivered: incident report, IOCs, and remediation plan.</p><h3>Deliverables</h3><ul class=\"muted\"><li>Forensic image & hash list</li><li>Timeline & evidence notes</li><li>Remediation & hardening checklist</li></ul>` }
+      if(key==='osint'){ html=`<h2>OSINT Profiling Framework</h2><p class=\"muted\">Framework combining automated collection and manual verification. Includes data normalization, confidence scoring, and privacy-preserving storage.</p>` }
+      if(key==='animation'){ html=`<h2>3D Logo Breakdown</h2><p class=\"muted\">Step-by-step: logo cleanup, 3D model conversion, animation curves, render passes, and final composite. Provided render settings and export presets.</p>` }
+      modalContent.innerHTML = `<div>${html}</div>`; modal.classList.add('open'); document.body.style.overflow='hidden';
+    }
+    window.openCase = openCase;
+
+    // Download guide stub
+    function downloadGuide(id){
+      const blob = new Blob([`This is a starter guide for ${id}. Replace with real content.`], {type:'text/plain'});
+      const url = URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=`${id}-guide.txt`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    }
+    window.downloadGuide = downloadGuide;
+
+    // CONTACT via EmailJS (client-side)
+    // IMPORTANT: Replace 'YOUR_USER_ID', 'YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID' with your EmailJS values.
+    document.addEventListener('DOMContentLoaded', ()=>{
+      // init emailjs (replace USER ID)
+      if(window.emailjs){ emailjs.init('YOUR_USER_ID'); }
+
+      const form = document.getElementById('contactForm'); const status = document.getElementById('formStatus');
+      form.addEventListener('submit', (e)=>{
+        e.preventDefault(); status.textContent='Sending...';
+        const data = new FormData(form);
+        const payload = Object.fromEntries(data);
+        if(window.emailjs){
+          emailjs.send('YOUR_SERVICE_ID','YOUR_TEMPLATE_ID', payload)
+            .then(()=>{ status.textContent='Message sent! I will reply as soon as possible.'; form.reset(); })
+            .catch(err=>{ console.error(err); status.textContent='Failed to send — check console for details or set EmailJS IDs.' });
+        } else { status.textContent='EmailJS not loaded. Make sure you included their script.' }
+      });
+    });
+
+    // Accessibility: close modal on ESC
+    window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeModal(); });
+  </script>
+
+  <script>
+    // small progressive enhancement: focus trap when modal open could be added; this is a starter version
   </script>
 </body>
 </html>
