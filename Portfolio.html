@@ -97,6 +97,20 @@
       .project-item{flex-direction:column;align-items:stretch}
       .project-thumb{width:100%;height:auto}
       .btn{width:100%;margin-top:12px}
+      section{padding:60px 6%}
+      h1{font-size:clamp(24px,6vw,48px)}
+      h2{font-size:24px}
+    }
+
+    @media (max-width:600px){
+      section{padding:40px 4%}
+      .card{padding:14px}
+      .hero{padding:100px 4% 60px}
+      .cta{margin-top:16px}
+      .btn{padding:12px 18px;font-size:14px}
+      .ghost{padding:8px 12px;font-size:14px}
+      nav a{margin-left:8px;font-size:12px}
+      form input, form textarea{padding:10px;font-size:16px}
     }
 
     /* Small flourishes */
@@ -146,7 +160,7 @@
         </div>
 
         <div class="hero-right" data-aos="fade-left">
-          <img src="./profile-photo.png" alt="Ghait Satardekar" style="border-radius:14px;border:4px solid var(--accent);box-shadow:0 20px 50px rgba(79,124,255,0.08)"/>
+          <img src="./profile-photo.png" alt="Ghait Satardekar" srcset="profile-photo-240w.png 240w, profile-photo-360w.png 360w, profile-photo-480w.png 480w, profile-photo-600w.png 600w" sizes="(max-width:600px) 100vw, 360px" style="border-radius:14px;border:4px solid var(--accent);box-shadow:0 20px 50px rgba(79,124,255,0.08)"/>
         </div>
       </div>
     </section>
@@ -186,7 +200,7 @@
 
       <div class="card" style="margin-bottom:16px;padding:18px">
         <div class="project-item">
-          <img class="project-thumb" src="./case-study-forensics.png" alt="case">
+          <img class="project-thumb" src="./case-study-forensics.png" alt="case" srcset="case-study-forensics-320w.png 320w, case-study-forensics-480w.png 480w, case-study-forensics-640w.png 640w" sizes="(max-width:900px) 100vw, 320px">
           <div>
             <div class="case-badge">Case Study</div>
             <h3>Insider Data Theft — Full Investigation</h3>
@@ -198,7 +212,7 @@
 
       <div class="card" style="margin-bottom:16px;padding:18px">
         <div class="project-item">
-          <img class="project-thumb" src="./osint-framework.png" alt="osint">
+          <img class="project-thumb" src="./osint-framework.png" alt="osint" srcset="osint-framework-320w.png 320w, osint-framework-480w.png 480w, osint-framework-640w.png 640w" sizes="(max-width:900px) 100vw, 320px">
           <div>
             <div class="case-badge">Tooling</div>
             <h3>OSINT Profiling Framework</h3>
@@ -210,7 +224,7 @@
 
       <div class="card" style="padding:18px">
         <div class="project-item">
-          <img class="project-thumb" src="./3d-logo-thumbnail.png" alt="logo" style="cursor:pointer" onclick="playVideo('3d-logo-animation.mp4')">
+          <img class="project-thumb" src="./3d-logo-thumbnail.png" alt="logo" srcset="3d-logo-thumbnail-320w.png 320w, 3d-logo-thumbnail-480w.png 480w, 3d-logo-thumbnail-640w.png 640w" sizes="(max-width:900px) 100vw, 320px" style="cursor:pointer" onclick="playVideo('3d-logo-animation.mp4')">
           <div>
             <div class="case-badge">Studio</div>
             <h3>3D Spinning Logo + Video Intro</h3>
@@ -393,9 +407,11 @@
     }
     window.downloadGuide = downloadGuide;
 
-    // Video player function (mobile-friendly: playsinline)
+    // Video player function (mobile-friendly: playsinline with WebM fallback)
     function playVideo(videoSrc){
-      modalContent.innerHTML = `<div style="text-align:center"><video width="100%" height="auto" controls playsinline webkit-playsinline style="border-radius:10px;max-height:80vh"><source src="${videoSrc}" type="video/mp4">Your browser does not support the video tag.</video></div>`;
+      const mp4 = videoSrc;
+      const webm = videoSrc.replace('.mp4', '.webm');
+      modalContent.innerHTML = `<div style="text-align:center"><video width="100%" height="auto" controls playsinline webkit-playsinline style="border-radius:10px;max-height:80vh"><source src="${webm}" type="video/webm"><source src="${mp4}" type="video/mp4">Your browser does not support the video tag.</video></div>`;
       // try to start playback (will respect browser autoplay/user gesture policies)
       modal.classList.add('open'); document.body.style.overflow='hidden';
       const vid = modalContent.querySelector('video');
