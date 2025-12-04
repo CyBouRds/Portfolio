@@ -3,6 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#0d0f17" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
   <title>Ghait Satardekar — Portfolio 2025</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -46,7 +48,7 @@
     p.lead{color:var(--muted);max-width:660px}
 
     .cta{margin-top:18px}
-    .btn{background:linear-gradient(90deg,var(--accent),#2e3ff4);color:#fff;padding:12px 20px;border-radius:12px;text-decoration:none;font-weight:700;display:inline-block}
+    .btn{background:linear-gradient(90deg,var(--accent),#2e3ff4);color:#fff;padding:14px 22px;border-radius:12px;text-decoration:none;font-weight:700;display:inline-flex;align-items:center;justify-content:center;min-height:44px;touch-action:manipulation}
     .ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:10px 14px;border-radius:10px;color:var(--muted);margin-left:12px}
 
     /* Card grid */
@@ -70,7 +72,7 @@
 
     /* Projects */
     .project-item{display:flex;gap:16px;align-items:flex-start}
-    .project-thumb{width:320px;height:200px;border-radius:10px;object-fit:cover;border:1px solid rgba(255,255,255,0.04)}
+    .project-thumb{width:320px;height:200px;border-radius:10px;object-fit:cover;border:1px solid rgba(255,255,255,0.04);-webkit-tap-highlight-color:transparent}
     .case-badge{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(79,124,255,0.12);color:var(--accent);font-weight:700;margin-bottom:8px}
 
     /* Contact */
@@ -92,6 +94,9 @@
     @media (max-width:900px){.modal-grid{grid-template-columns:1fr}
       .contact-grid{grid-template-columns:1fr}
       .hero-right{display:none}
+      .project-item{flex-direction:column;align-items:stretch}
+      .project-thumb{width:100%;height:auto}
+      .btn{width:100%;margin-top:12px}
     }
 
     /* Small flourishes */
@@ -132,7 +137,7 @@
 
           <div class="cta">
             <a class="btn" href="#contact">Hire Me</a>
-            <a class="ghost" href="Ghait-Satardekar-CV.pdf" download>Download CV</a>
+            <a class="ghost" id="downloadCv" href="Ghait-Satardekar-CV.pdf" download rel="noopener" target="_blank">Download CV</a>
           </div>
 
           <div style="margin-top:22px;color:var(--muted)">
@@ -388,12 +393,26 @@
     }
     window.downloadGuide = downloadGuide;
 
-    // Video player function
+    // Video player function (mobile-friendly: playsinline)
     function playVideo(videoSrc){
-      modalContent.innerHTML = `<div style="text-align:center"><video width="100%" height="auto" controls style="border-radius:10px;max-height:80vh"><source src="${videoSrc}" type="video/mp4">Your browser does not support the video tag.</video></div>`;
+      modalContent.innerHTML = `<div style="text-align:center"><video width="100%" height="auto" controls playsinline webkit-playsinline style="border-radius:10px;max-height:80vh"><source src="${videoSrc}" type="video/mp4">Your browser does not support the video tag.</video></div>`;
+      // try to start playback (will respect browser autoplay/user gesture policies)
       modal.classList.add('open'); document.body.style.overflow='hidden';
+      const vid = modalContent.querySelector('video');
+      try{ vid.play().catch(()=>{/* user gesture required */}); }catch(e){}
     }
     window.playVideo = playVideo;
+
+    // CV download fallback: some mobile browsers (iOS) ignore `download` attribute for cross-origin files.
+    (function(){
+      const downloadLink = document.getElementById('downloadCv');
+      if(!downloadLink) return;
+      // Ensure the link opens in a new tab as a fallback; modern browsers will download if supported.
+      downloadLink.addEventListener('click', (e)=>{
+        // If `download` is unsupported we already set target=_blank, so allow default; no-op here.
+        // Keep this handler for potential analytics or future fallback logic.
+      });
+    })();
 
     // CONTACT via EmailJS (client-side)
     // IMPORTANT: Replace 'YOUR_USER_ID', 'YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID' with your EmailJS values.
